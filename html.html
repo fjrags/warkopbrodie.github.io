@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Warkop Brodie</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary:#1c1b1b;
+  --accent:#b68d40;
+  --text-light:#f5f5f5;
+}
+
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Poppins',sans-serif;background-color:var(--primary);color:var(--text-light);line-height:1.6;scroll-behavior:smooth;}
+
+/* HEADER */
+header{
+  position: fixed; top:0; left:0; width:100%; padding:18px 6%; display:flex; justify-content:space-between; align-items:center;
+  background-color: rgba(28,27,27,0.5); backdrop-filter: blur(10px);
+  border-bottom:1px solid rgba(255,255,255,0.1); transition: background-color 0.4s,padding 0.3s,box-shadow 0.3s; z-index:1000;
+}
+header.scrolled{background-color:rgba(28,27,27,0.85); padding:10px 6%; box-shadow:0 4px 20px rgba(0,0,0,0.5);}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo img{height:45px;width:45px;border-radius:50%;object-fit:cover;}
+.logo span{color:var(--accent);font-size:1.5rem;font-weight:600;}
+nav{display:flex;align-items:center;gap:35px;transition:all 0.4s ease;}
+nav a{color:var(--text-light);text-decoration:none;font-weight:500;font-size:0.95rem;position:relative;}
+nav a::after{content:'';position:absolute;width:0;height:2px;background-color:var(--accent);left:0;bottom:-4px;transition:width 0.3s;}
+nav a:hover::after{width:100%;}
+.btn-cta{background-color:var(--accent);color:#111;padding:8px 18px;border-radius:8px;font-weight:600;text-decoration:none;transition:all 0.3s;}
+.btn-cta:hover{background-color:#d4af37;color:#000;transform:translateY(-2px);}
+.menu-toggle{display:none;flex-direction:column;cursor:pointer;gap:5px;}
+.menu-toggle span{width:28px;height:3px;background-color:var(--text-light);border-radius:2px;transition:all 0.3s;}
+.menu-toggle.active span:nth-child(1){transform:rotate(45deg) translateY(8px);}
+.menu-toggle.active span:nth-child(2){opacity:0;}
+.menu-toggle.active span:nth-child(3){transform:rotate(-45deg) translateY(-8px);}
+
+/* HERO */
+.hero{position:relative;height:100vh;display:flex;justify-content:center;align-items:center;text-align:center;color:white;}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
+.hero::after{content:"";position:absolute;inset:0;background-color:rgba(0,0,0,0.6);}
+.hero-content{position:relative;z-index:1;animation:fadeInUp 1.5s ease;}
+.hero h2{font-size:2.8rem;color:var(--accent);margin-bottom:10px;}
+.hero p{font-size:1.1rem;}
+
+/* SECTION */
+.section{padding:60px 10%;opacity:0;transform:translateY(50px);transition:all 0.8s;}
+.section.visible{opacity:1;transform:translateY(0);}
+.section h2{color:var(--accent);margin-bottom:20px;text-align:center;font-size:1.8rem;}
+
+/* MENU FILTER */
+.menu-filter{display:flex;justify-content:center;gap:15px;margin-bottom:30px;flex-wrap:wrap;}
+.menu-filter button{padding:8px 15px;background:#2b2b2b;color:var(--text-light);border:none;border-radius:5px;cursor:pointer;transition:all 0.3s;}
+.menu-filter button.active, .menu-filter button:hover{background:var(--accent);color:#111;}
+
+/* MENU CONTAINER */
+.menu-container {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:20px;
+  padding:10px;
+}
+.menu-item {
+  background: rgba(31,31,31,0.75);
+  border:1px solid rgba(182,141,64,0.3);
+  backdrop-filter: blur(8px);
+  padding:18px;
+  border-radius:15px;
+  text-align:center;
+  display:block;
+  opacity: 1;
+  transform: scale(1);
+  flex-direction:column;
+  justify-content:space-between;
+  transition:transform 0.3s, box-shadow 0.4s, border-color 0.3s;
+  position: relative;
+  height: auto;
+}
+.menu-item:hover {transform:translateY(-6px) scale(1.03); box-shadow:0 8px 20px rgba(182,141,64,0.4); border-color:var(--accent);}
+.menu-item img {width:100%;height:150px;object-fit:cover;border-radius:12px;margin-bottom:12px;}
+.menu-item h3 {color:var(--accent);margin-top:0;font-size:1.2rem;margin-bottom:6px;}
+.menu-item p {font-size:0.95rem;margin-bottom:10px;color:#ddd;}
+.menu-item .qty-controls{display:flex;justify-content:center;gap:10px;margin-top:10px;}
+.menu-item .qty-controls button{padding:4px 10px;background:var(--accent);border:none;border-radius:6px;color:#111;font-weight:600;cursor:pointer;}
+.menu-item .qty{display:inline-block;width:25px;text-align:center;color:#fff;}
+.menu-item.selected {border:2px solid var(--accent); box-shadow:0 8px 20px rgba(182,141,64,0.6); transform:translateY(-3px) scale(1.03);}
+
+/* RESPONSIVE GRID */
+@media(max-width:768px){
+  nav{
+    position:absolute;top:100%;right:0;background-color:rgba(0,0,0,0.97);
+    flex-direction:column;width:100%;max-height:0;overflow:hidden;text-align:center;gap:20px;transition:max-height 0.4s;
+  }
+  nav.open{max-height:400px;padding:20px 0;}
+  .menu-toggle{display:flex;}
+  .btn-cta{display:block;margin:10px auto;}
+}
+
+/* ULTRA MOBILE */
+@media(max-width:480px){
+  .menu-container{grid-template-columns:1fr;gap:12px;}
+  .menu-item img{height:120px;}
+}
+
+/* ABOUT */
+.about-content{max-width:700px;margin:0 auto;text-align:center;line-height:1.8;}
+
+/* INFO */
+.info p{text-align:center;margin-bottom:10px;}
+
+/* FOOTER */
+footer{background-color:#000;color:var(--text-light);text-align:center;padding:20px;font-size:0.9rem;margin-top:40px;}
+
+/* FORM ORDER */
+#order input, #order textarea{width:100%;padding:8px 10px;margin-bottom:10px;border-radius:6px;border:none;outline:none;background:#2b2b2b;color:#f5f5f5;resize:none;}
+#order textarea{height:60px;}
+#order .btn{background-color:var(--accent);color:#111;padding:8px 18px;border-radius:8px;font-weight:600;text-decoration:none;transition:all 0.3s;cursor:pointer;}
+#order .btn:hover{background-color:#d4af37;color:#000;transform:translateY(-2px);}
+#cart-list li{display:flex;justify-content:space-between;margin-bottom:6px;}
+.remove-item{cursor:pointer;color:#d9534f;}
+#subtotal{margin-top:10px;text-align:right;font-weight:600;color:#b68d40;}
+
+@keyframes fadeInUp{from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+<body>
+
+<header id="main-header">
+  <div class="logo"><img src="assets/img/logo.png" alt="logo"><span>Warkop Brodie</span></div>
+  <div class="menu-toggle" id="menu-toggle"><span></span><span></span><span></span></div>
+  <nav id="nav">
+    <a href="#menu">Menu</a>
+    <a href="#about">Tentang Kami</a>
+    <a href="#info">Info Toko</a>
+    <a href="#order" class="btn-cta">Pesan Sekarang</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <img src="assets/img/background.jpg" alt="Warkop Brodie">
+  <div class="hero-content"><h2>Selamat Datang di Warkop Brodie</h2><p>Semua berhak menikmatie ☕</p></div>
+</section>
+
+<section class="section" id="menu">
+  <h2>Menu Kami</h2>
+  <div class="menu-filter">
+    <button class="active" data-filter="all">Semua</button>
+    <button data-filter="minuman">Minuman</button>
+    <button data-filter="makanan">Makanan</button>
+  </div>
+  <div class="menu-container">
+    <!-- ========== MINUMAN (20) ========== -->
+    <div class="menu-item minuman" data-category="minuman" data-name="All StickyMilk">
+      <img src="assets/img/all stickymilk.jpeg" alt="StickyMilk 4 Rasa">
+      <h3>StickyMilk</h3>
+      <p class="price-tag">13.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="Kukubima Susu">
+      <img src="assets/img/kukubima susu.jpeg" alt="Kukubima Susu">
+      <h3>Kukubima Susu</h3>
+      <p class="price-tag">Rp10.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="Exrajoss Susu">
+      <img src="assets/img/extrajoss susu.jpeg" alt="Exrajoss Susu">
+      <h3>Exrajoss Susu</h3>
+      <p class="price-tag">Rp10.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="Tea Tarik">
+      <img src="assets/img/tea tarik.jpeg" alt="Tea Tarik">
+      <h3>Tea Tarik</h3>
+      <p class="price-tag">Rp7.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="Chocolatos Matcha & Cokelat">
+      <img src="assets/img/chocolatos matcha & cokelat.png" alt="Chocolatos">
+      <h3>Chocolatos Matcha & Cokelat</h3>
+      <p class="price-tag">Rp7.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="ABC Klepon">
+      <img src="assets/img/abc klepon.jpeg" alt="ABC Klepon">
+      <h3>ABC Klepon</h3>
+      <p class="price-tag">Rp7.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="Milo">
+      <img src="assets/img/milo.jpeg" alt="Milo">
+      <h3>Milo</h3>
+      <p class="price-tag">Rp7.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="Hilo">
+      <img src="assets/img/hilo.jpeg" alt="Hilo">
+      <h3>Hilo</h3>
+      <p class="price-tag">Rp7.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="Ovaltine">
+      <img src="assets/img/ovaltine.webp" alt="Ovaltine">
+      <h3>Ovaltine</h3>
+      <p class="price-tag">Rp7.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="Creamy Latte">
+      <img src="assets/img/creamy latte.jpeg" alt="Creamy Latte">
+      <h3>Creamy Latte</h3>
+      <p class="price-tag">Rp7.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="Drink BengBeng">
+      <img src="assets/img/drink bengbeng.jpeg" alt="Drink Beng Beng">
+      <h3>Drink BengBeng</h3>
+      <p class="price-tag">Rp7.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="Soda Gembira">
+      <img src="assets/img/soda gembira.jpg" alt="Soda Gembira">
+      <h3>Soda Gembira</h3>
+      <p class="price-tag">Rp10.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="Coffe Beer">
+      <img src="assets/img/coffe beer.jpeg" alt="Coffe Beer">
+      <h3>Coffe Beer</h3>
+      <p class="price-tag">Rp17.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="Teh Tarik Susu">
+      <img src="assets/img/teh tarik susu.jpeg" alt="Teh Tarik Susu">
+      <h3>Teh Tarik Susu</h3>
+      <p class="price-tag">Rp12.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="Freeze Susu">
+      <img src="assets/img/freeze susu.jpeg" alt="Freeze Susu">
+      <h3>Freeze Susu</h3>
+      <p class="price-tag">Rp12.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="Americano">
+      <img src="assets/img/americano.jpeg" alt="Americano">
+      <h3>Americano</h3>
+      <p class="price-tag">Rp5.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="Nescafe Latte">
+      <img src="assets/img/nescafe latte.jpg" alt="Nescafe Ltate">
+      <h3>Nescafe Latte</h3>
+      <p class="price-tag">Rp10.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="All Good Day">
+      <img src="assets/img/all good day.jpeg" alt="All Good Day">
+      <h3>All Good Day</h3>
+      <p class="price-tag">Rp7.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="All Kopi Panas">
+      <img src="assets/img/all kopi panas.jpeg" alt="All Kopi Panas">
+      <h3>All Kopi Panas</h3>
+      <p class="price-tag">Rp5.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item minuman" data-category="minuman" data-name="All Pop Ice">
+      <img src="assets/img/all pop ice.jpeg" alt="All Pop Ice">
+      <h3>All Pop Ice</h3>
+      <p class="price-tag">Rp5.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <!-- ========== MAKANAN (26) ========== -->
+    <div class="menu-item makanan" data-category="makanan" data-name="Sate Taichan">
+      <img src="assets/img/sate taichan.jpg" alt="Sate Taichan">
+      <h3>Sate Taichan</h3>
+      <p class="price-tag">Rp20.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Nasi + Taichan">
+      <img src="assets/img/nasi + taichan.jpeg" alt="Nasi + Taichan">
+      <h3>Nasi + Taichan</h3>
+      <p class="price-tag">Rp20.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Nasi Goreng">
+      <img src="assets/img/nasi goreng.jpg" alt="Nasi Goreng">
+      <h3>Nasi Goreng</h3>
+      <p class="price-tag">Rp15.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Nasi Goreng + Taichan">
+      <img src="assets/img/nasi goreng + taichan.webp" alt="Nasi Goreng + Taichan">
+      <h3>Nasi Goreng + Taichan</h3>
+      <p class="price-tag">Rp30.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Nasi Telor">
+      <img src="assets/img/nasi telor.jpeg" alt="Nasi Telor">
+      <h3>Nasi Telor</h3>
+      <p class="price-tag">Rp10.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Kwetiau">
+      <img src="assets/img/kwetiau.jpg" alt="Kwetiau">
+      <h3>Kwetiau</h3>
+      <p class="price-tag">Rp15.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Nasi + Omlet">
+      <img src="assets/img/nasi omlet.jpeg" alt="Nasi + Omlet">
+      <h3>Nasi + Omlet</h3>
+      <p class="price-tag">Rp15.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Baso Aci Cili Oil">
+      <img src="assets/img/baso aci cili oil.jpeg" alt="Baso Aci Cili Oil">
+      <h3>Baso Aci Cili Oil</h3>
+      <p class="price-tag">Rp15.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Baso Tekwan">
+      <img src="assets/img/baso tekwan.jpeg" alt="Baso Tekwan">
+      <h3>Baso Tekwan</h3>
+      <p class="price-tag">Rp12000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Mie Bangladesh">
+      <img src="assets/img/mie bangladesh.jpg" alt="Mie Bangladesh">
+      <h3>Mie Bangladesh</h3>
+      <p class="price-tag">Rp16.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Mie Kornet Keju">
+      <img src="assets/img/mie kornet keju.jpeg" alt="Mie Kornet Keju">
+      <h3>Mie Kornet Keju</h3>
+      <p class="price-tag">Rp18.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Mie Nyemek">
+      <img src="assets/img/mie nyemek.jpeg" alt="Mie Nyemek">
+      <h3>Mie Nyemek</h3>
+      <p class="price-tag">Rp16.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="All Indomie Goreng & Kuah">
+      <img src="assets/img/all indomie goreng & kuah.jpeg" alt="All Indomie Goreng">
+      <h3>All Indomie Goreng & Kuah</h3>
+      <p class="price-tag">Rp8.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="All Indomie + Telor">
+      <img src="assets/img/all indomie + telor.jpeg" alt="All Indomie + Telor">
+      <h3>All Indomie + Telor</h3>
+      <p class="price-tag">Rp12.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Ketan Susu Original">
+      <img src="assets/img/ketan-susu original.jpg" alt="Ketan Susu Original">
+      <h3>Ketan Susu Original</h3>
+      <p class="price-tag">Rp10.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="All Ketan Susu 7 Rasa">
+      <img src="assets/img/ketan_7_rasa.jpg" alt="All Ketan Susu 7 Rasa">
+      <h3>All Ketan Susu 7 Rasa</h3>
+      <p class="price-tag">Rp13.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Kentang Goreng">
+      <img src="assets/img/kentang goreng.jpeg" alt="Kentang Goreng">
+      <h3>Kentang Goreng</h3>
+      <p class="price-tag">Rp10.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Sosis Goreng">
+      <img src="assets/img/sosis goreng.jpeg" alt="Sosis Goreng">
+      <h3>Sosis Goreng</h3>
+      <p class="price-tag">Rp10.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Baso Goreng">
+      <img src="assets/img/baso goreng.jpeg" alt="Baso Goreng">
+      <h3>Baso Goreng</h3>
+      <p class="price-tag">Rp10.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Otak Otak Goreng">
+      <img src="assets/img/otak otak goreng.jpeg" alt="Otak Otak Goreng">
+      <h3>Otak Otak Goreng</h3>
+      <p class="price-tag">Rp10.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Nugget Goreng">
+      <img src="assets/img/nugget.jpeg" alt="Nugget Goreng">
+      <h3>Nugget Goreng</h3>
+      <p class="price-tag">Rp12.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Cireng Rujak">
+      <img src="assets/img/cireng rujak.jpg" alt="Cireng Rujak">
+      <h3>Cireng Rujak</h3>
+      <p class="price-tag">Rp10.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Omlet">
+      <img src="assets/img/omlet.jpg" alt="Omlet">
+      <h3>Omlet</h3>
+      <p class="price-tag">Rp10.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Mix Platter">
+      <img src="assets/img/mix platter.jpeg" alt="Mix Platter">
+      <h3>Mix Platter</h3>
+      <p class="price-tag">Rp15.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+    <div class="menu-item makanan" data-category="makanan" data-name="Roti Bakar">
+      <img src="assets/img/roti bakar.jpeg" alt="Roti Bakar">
+      <h3>Roti Bakar</h3>
+      <p class="price-tag">Rp15.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
+</section>
+
+<section class="section" id="order">
+  <h2>Pesan Sekarang</h2>
+  <div style="max-width:500px;margin:0 auto;">
+    <label>Nama Anda:</label>
+    <input type="text" id="customer-name" placeholder="Masukkan nama Anda">
+    <label>Catatan Pesanan:</label>
+    <textarea id="order-note" placeholder="Contoh: Tidak terlalu manis, tanpa es, dll"></textarea>
+    <div id="cart" style="margin-top:20px;">
+      <h3>Keranjang Pesanan</h3>
+      <ul id="cart-list" style="list-style:none;padding-left:0;"></ul>
+      <div id="subtotal">Subtotal: Rp0</div>
+      <button id="send-order" class="btn">Kirim Pesanan via WhatsApp</button>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <h2>Tentang Kami</h2>
+  <div class="about-content">
+    <p>Brodie lahir dari kecintaan yang mendalam terhadap budaya ngopi yang santai, akrab, dan tanpa sekat...</p>
+  </div>
+</section>
+
+<section class="section info" id="info">
+  <h2>Info Toko</h2>
+  <p>📍 Jl. Aria Santika No.40A, RT.005/RW.011, Margasari, Kec. Karawaci, Kota Tangerang, Banten 15114</p>
+  <p>🕒 Jam Buka: 12.00Am- 03.00Am</p>
+  <p>📞 Kontak: 081511152109</p>
+</section>
+
+<footer>&copy; Warkop Brodie. Sampai Mati.</footer>
+
+<script>
+// HEADER & MENU
+const header=document.getElementById('main-header');
+const toggle=document.getElementById('menu-toggle');
+const nav=document.getElementById('nav');
+toggle.addEventListener('click',()=>{toggle.classList.toggle('active');nav.classList.toggle('open');});
+window.addEventListener('scroll',()=>{window.scrollY>60?header.classList.add('scrolled'):header.classList.remove('scrolled');});
+
+// SCROLL ANIMATION
+const sections=document.querySelectorAll('.section');
+window.addEventListener('scroll',()=>{const triggerBottom=window.innerHeight*0.85;sections.forEach(sec=>{if(sec.getBoundingClientRect().top<triggerBottom) sec.classList.add('visible');});});
+
+// MENU FILTER
+const filterButtons=document.querySelectorAll('.menu-filter button');
+const menuItems=document.querySelectorAll('.menu-item');
+filterButtons.forEach(btn=>{btn.addEventListener('click',()=>{filterButtons.forEach(b=>b.classList.remove('active'));btn.classList.add('active');const filter=btn.dataset.filter;menuItems.forEach(item=>{item.style.display=(filter==='all'||item.dataset.category===filter)?'block':'none';});});});
+
+// CART LOGIC
+let cart={};
+const cartList=document.getElementById('cart-list');
+const sendOrderBtn=document.getElementById('send-order');
+const customerName=document.getElementById('customer-name');
+const orderNote=document.getElementById('order-note');
+const subtotalEl=document.getElementById('subtotal');
+
+function updateCart(){
+  cartList.innerHTML='';
+  let subtotal=0;
+  const keys=Object.keys(cart);
+  if(keys.length===0){cartList.innerHTML='<li>Keranjang kosong</li>'; subtotal=0;}
+  keys.forEach(name=>{
+    const li=document.createElement('li');
+    li.innerHTML=`${name} x ${cart[name].qty} <span class="remove-item" data-name="${name}">✖</span>`;
+    cartList.appendChild(li);
+    subtotal+=cart[name].price*cart[name].qty;
+  });
+  subtotalEl.textContent=`Subtotal: Rp${subtotal.toLocaleString('id-ID')}`;
+  document.querySelectorAll('.remove-item').forEach(el=>{
+    el.addEventListener('click',e=>{
+      const name=e.target.dataset.name;
+      delete cart[name];
+      document.querySelectorAll('.menu-item').forEach(item=>{if(item.dataset.name===name){item.querySelector('.qty').textContent='0'; item.classList.remove('selected');}});
+      updateCart();
+    });
+  });
+}
+
+// QTY BUTTONS - ambil harga dari HTML
+document.querySelectorAll('.menu-item').forEach(item=>{
+  const name=item.dataset.name;
+  let priceText=item.querySelector('.price-tag').textContent.replace(/[^\d]/g,'');
+  const price=parseInt(priceText);
+  const qtySpan=item.querySelector('.qty');
+
+  item.querySelector('.increase').addEventListener('click',()=>{
+    let v=parseInt(qtySpan.textContent)+1;
+    qtySpan.textContent=v;
+    cart[name]={qty:v, price:price};
+    item.classList.add('selected');
+    updateCart();
+  });
+
+  item.querySelector('.decrease').addEventListener('click',()=>{
+    let v=parseInt(qtySpan.textContent)-1;
+    if(v<0)v=0;
+    qtySpan.textContent=v;
+    if(v===0){delete cart[name]; item.classList.remove('selected');}else{cart[name]={qty:v, price:price};}
+    updateCart();
+  });
+});
+
+// SEND ORDER
+sendOrderBtn.addEventListener('click',()=>{
+  const name=customerName.value.trim();
+  const note=orderNote.value.trim();
+  if(!name) return alert('Masukkan nama Anda!');
+  if(Object.keys(cart).length===0) return alert('Keranjang kosong!');
+  let msg=`Halo Warkop Brodie! Nama saya ${name} dan saya ingin memesan:\n`;
+  for(const [menu,info] of Object.entries(cart)){msg+=`- ${menu} x ${info.qty}\n`;}
+  if(note) msg+=`Catatan: ${note}\n`;
+  const waLink=`https://wa.me/6281511152109?text=${encodeURIComponent(msg)}`;
+  window.open(waLink,'_blank');
+  cart={};
+  document.querySelectorAll('.menu-item').forEach(item=>{item.querySelector('.qty').textContent='0'; item.classList.remove('selected');});
+  updateCart();
+  customerName.value='';
+  orderNote.value='';
+});
+</script>
+
+</body>
+</html>
