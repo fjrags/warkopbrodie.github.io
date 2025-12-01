@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-H91ST9G3ST"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -23,7 +22,8 @@
 
 /* RESET */
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Poppins',sans-serif;background-color:var(--primary);color:var(--text-light);line-height:1.6;scroll-behavior:smooth;}
+html {scroll-behavior: smooth;}
+body{font-family:'Poppins',sans-serif;background-color:var(--primary);color:var(--text-light);line-height:1.6;}
 
 /* HEADER */
 header{
@@ -48,12 +48,35 @@ nav a:hover::after{width:100%;}
 .menu-toggle.active span:nth-child(3){transform:rotate(-45deg) translateY(-8px);}
 
 /* HERO */
-.hero{position:relative;height:100vh;display:flex;justify-content:center;align-items:center;text-align:center;color:white;}
-.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
-.hero::after{content:"";position:absolute;inset:0;background-color:rgba(0,0,0,0.6);}
+.hero{
+  position:relative;
+  height:85vh; 
+  display:flex;justify-content:center;align-items:center;text-align:center;color:white;
+  background-color: var(--primary);
+}
+.hero img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;
+  z-index:0; opacity: 0.9;
+}
+.hero::after{content:"";position:absolute;inset:0;background-color:rgba(0,0,0,0.5);}
 .hero-content{position:relative;z-index:1;animation:fadeInUp 1.5s ease;}
-.hero h2{font-size:2.8rem;color:var(--accent);margin-bottom:10px;}
+.hero h2{font-size:2.8rem;color:var(--accent);margin-bottom:10px; min-height: 1.2em;}
 .hero p{font-size:1.1rem;}
+
+/* TYPEWRITER CURSOR */
+.cursor {
+  display: inline-block;
+  background-color: transparent;
+  color: var(--accent);
+  animation: blink 1s infinite;
+  font-weight: bold;
+  margin-left: 5px;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
 
 /* SECTION */
 .section{padding:60px 10%;opacity:0;transform:translateY(50px);transition:all 0.8s;}
@@ -106,6 +129,7 @@ nav a:hover::after{width:100%;}
   nav.open{max-height:400px;padding:20px 0;}
   .menu-toggle{display:flex;}
   .btn-cta{display:block;margin:10px auto;}
+  .hero h2 {font-size: 2rem;}
 }
 
 /* ULTRA MOBILE */
@@ -117,20 +141,174 @@ nav a:hover::after{width:100%;}
 /* ABOUT */
 .about-content{max-width:700px;margin:0 auto;text-align:center;line-height:1.8;}
 
-/* INFO */
+/* INFO & MAPS */
 .info p{text-align:center;margin-bottom:10px;}
+.map-container {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 40%;
+  height: 0;
+  border-radius: 15px;
+  border: 2px solid var(--accent);
+  margin-top: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.map-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
 
-/* FOOTER */
-footer{background-color:#000;color:var(--text-light);text-align:center;padding:20px;font-size:0.9rem;margin-top:40px;}
-
-/* FORM ORDER */
-#order input, #order textarea{width:100%;padding:8px 10px;margin-bottom:10px;border-radius:6px;border:none;outline:none;background:#2b2b2b;color:#f5f5f5;resize:none;}
+/* FORM ORDER & QRIS */
+#order input, #order textarea, #order select{width:100%;padding:8px 10px;margin-bottom:10px;border-radius:6px;border:none;outline:none;background:#2b2b2b;color:#f5f5f5;resize:none;}
+#order select {cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23b68d40%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"); background-repeat: no-repeat; background-position: right .7em top 50%; background-size: .65em auto;}
 #order textarea{height:60px;}
 #order .btn{background-color:var(--accent);color:#111;padding:8px 18px;border-radius:8px;font-weight:600;text-decoration:none;transition:all 0.3s;cursor:pointer;}
 #order .btn:hover{background-color:#d4af37;color:#000;transform:translateY(-2px);}
 #cart-list li{display:flex;justify-content:space-between;margin-bottom:6px;}
 .remove-item{cursor:pointer;color:#d9534f;}
 #subtotal{margin-top:10px;text-align:right;font-weight:600;color:#b68d40;}
+
+/* QRIS STYLING */
+#qris-box {
+  background: #2b2b2b;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 10px;
+  display: none;
+  border: 1px solid var(--accent);
+  animation: fadeIn 0.5s ease;
+}
+#qris-box img {
+  width: 100%;
+  max-width: 250px;
+  border-radius: 8px;
+  border: 2px solid #fff;
+}
+@keyframes fadeIn {from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);}}
+
+/* ========== TOMBOL SCROLL TO TOP ========== */
+#scrollTopBtn {
+  display: none; /* Disembunyikan kalo blm scroll */
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 9999;
+  font-size: 20px;
+  border: none;
+  outline: none;
+  background-color: var(--accent);
+  color: #000;
+  cursor: pointer;
+  padding: 10px 15px;
+  border-radius: 50%; /* Jadi Bulet */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  transition: all 0.3s ease;
+}
+
+#scrollTopBtn:hover {
+  background-color: #d4af37;
+  transform: translateY(-5px); /* Efek naik dikit pas di hover */
+}
+
+/* FOOTER (Udah Dikecilin Sesuai Request) */
+footer {
+  background-color: #111;
+  color: var(--text-light);
+  padding-top: 25px;
+  margin-top: 40px;
+  border-top: 3px solid var(--accent);
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 0 6% 20px;
+  gap: 20px;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 250px;
+}
+
+.footer-section h3 {
+  color: var(--accent);
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  position: relative;
+  display: inline-block;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+}
+.footer-links li {
+  margin-bottom: 12px;
+}
+.footer-links a {
+  color: #ccc;
+  text-decoration: none;
+  transition: all 0.3s;
+  display: block;
+}
+.footer-links a:hover {
+  color: var(--accent);
+  padding-left: 8px;
+}
+
+.social-icons {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+.social-icons a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 45px;
+  height: 45px;
+  background: #2b2b2b;
+  border-radius: 50%;
+  transition: 0.3s;
+  border: 1px solid transparent;
+}
+.social-icons a svg {
+  width: 24px;
+  height: 24px;
+  fill: white;
+  transition: 0.3s;
+}
+.social-icons a:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  background: #000;
+}
+.social-icons a:hover svg {
+  fill: var(--accent);
+}
+
+.footer-bottom {
+  background-color: #000;
+  text-align: center;
+  padding: 10px;
+  font-size: 0.8rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+@media(max-width: 768px){
+  .footer-content{text-align: center; flex-direction: column;}
+  .social-icons {justify-content: center;}
+}
 
 @keyframes fadeInUp{from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:translateY(0);}}
 </style>
@@ -149,9 +327,14 @@ footer{background-color:#000;color:var(--text-light);text-align:center;padding:2
 </header>
 
 <section class="hero">
-  <img src="assets/img/background.jpg" alt="Warkop Brodie">
-  <div class="hero-content"><h2>Selamat Datang di Warkop Brodie</h2><p>Semua berhak menikmatie ☕</p></div>
+  <img src="assets/img/background.jpg" alt="background">
+  <div class="hero-content">
+    <h2><span id="typing-text"></span><span class="cursor">|</span></h2>
+    <p>Semua berhak menikmatie ☕</p>
+  </div>
 </section>
+
+<button onclick="topFunction()" id="scrollTopBtn" title="Kembali ke atas">⬆</button>
 
 <section class="section" id="menu">
   <h2>Menu Kami</h2>
@@ -161,14 +344,13 @@ footer{background-color:#000;color:var(--text-light);text-align:center;padding:2
     <button data-filter="makanan">Makanan</button>
   </div>
   <div class="menu-container">
-    <!-- ========== MINUMAN (20) ========== -->
     <div class="menu-item minuman" data-category="minuman" data-name="All StickyMilk">
-      <img src="assets/img/all stickymilk.jpeg" alt="StickyMilk 4 Rasa">
+      <img src="assets/img/all stickymilk.jpeg" alt="StickyMilk">
       <h3>StickyMilk</h3>
       <p class="price-tag">13.000</p>
       <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
     </div>
-
+    
     <div class="menu-item minuman" data-category="minuman" data-name="Kukubima Susu">
       <img src="assets/img/kukubima susu.jpeg" alt="Kukubima Susu">
       <h3>Kukubima Susu</h3>
@@ -302,7 +484,13 @@ footer{background-color:#000;color:var(--text-light);text-align:center;padding:2
       <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
     </div>
 
-    <!-- ========== MAKANAN (26) ========== -->
+     <div class="menu-item makanan" data-category="makanan" data-name="All Katsu">
+      <img src="assets/img/All Katsu.jpg" alt="All Katsu">
+      <h3>All Katsu</h3>
+      <p class="price-tag">Rp15.000</p>
+      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
+    </div>
+
     <div class="menu-item makanan" data-category="makanan" data-name="Sate Taichan">
       <img src="assets/img/sate taichan.jpg" alt="Sate Taichan">
       <h3>Sate Taichan</h3>
@@ -401,15 +589,8 @@ footer{background-color:#000;color:var(--text-light);text-align:center;padding:2
       <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
     </div>
 
-    <div class="menu-item makanan" data-category="makanan" data-name="Ketan Susu Original">
-      <img src="assets/img/ketan-susu original.jpg" alt="Ketan Susu Original">
-      <h3>Ketan Susu Original</h3>
-      <p class="price-tag">Rp10.000</p>
-      <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
-    </div>
-
     <div class="menu-item makanan" data-category="makanan" data-name="All Ketan Susu 7 Rasa">
-      <img src="assets/img/ketan_7_rasa.jpg" alt="All Ketan Susu 7 Rasa">
+      <img src="assets/img/ketan-susu original.jpg" alt="All Ketan Susu 7 Rasa">
       <h3>All Ketan Susu 7 Rasa</h3>
       <p class="price-tag">Rp13.000</p>
       <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
@@ -478,6 +659,7 @@ footer{background-color:#000;color:var(--text-light);text-align:center;padding:2
       <div class="qty-controls"><button class="decrease">-</button><span class="qty">0</span><button class="increase">+</button></div>
     </div>
 
+  </div>
 </section>
 
 <section class="section" id="order">
@@ -485,8 +667,22 @@ footer{background-color:#000;color:var(--text-light);text-align:center;padding:2
   <div style="max-width:500px;margin:0 auto;">
     <label>Nama Anda:</label>
     <input type="text" id="customer-name" placeholder="Masukkan nama Anda">
+    
+    <label>Metode Pembayaran:</label>
+    <select id="payment-method">
+      <option value="Tunai">Tunai (Cash) Ke Kasir</option>
+      <option value="QRIS">QRIS (Scan Barcode)</option>
+    </select>
+
+    <div id="qris-box">
+      <p style="color:var(--accent); font-weight:600; margin-bottom:10px;">Scan QRIS di bawah ini:</p>
+      <img src="assets/img/qris.jpg" alt="QRIS Warkop Brodie">
+      <p style="font-size:0.8rem; margin-top:5px; color:#ddd;">*Mohon konfirmasi bukti bayar ke WhatsApp</p>
+    </div>
+
     <label>Catatan Pesanan:</label>
     <textarea id="order-note" placeholder="Contoh: Tidak terlalu manis, tanpa es, dll"></textarea>
+    
     <div id="cart" style="margin-top:20px;">
       <h3>Keranjang Pesanan</h3>
       <ul id="cart-list" style="list-style:none;padding-left:0;"></ul>
@@ -505,12 +701,54 @@ footer{background-color:#000;color:var(--text-light);text-align:center;padding:2
 
 <section class="section info" id="info">
   <h2>Info Toko</h2>
-  <p>📍 Jl. Aria Santika No.40A, RT.005/RW.011, Margasari, Kec. Karawaci, Kota Tangerang, Banten 15114</p>
-  <p>🕒 Jam Buka: 12.00Am- 03.00Am</p>
-  <p>📞 Kontak: 081511152109</p>
+  <p>📍 Jl. Aria Santika No.38, RT.003/RW.003, Margasari, Kec. Karawaci, Kota Tangerang, Banten 15114</p>
+  <p>🕒 Jam Buka: 12.00pm - 03.00Am</p>
+  <p>📞 Kontak: 0815-1115-2109</p>
+
+  <div class="map-container">
+    <iframe 
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.642224470335!2d106.60854440000001!3d-6.1786224999999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69ff00077d460d%3A0x1c324b076922d5e6!2sWarkop%20brodie!5e0!3m2!1sid!2sid!4v1764318104683!5m2!1sid!2sid"
+      allowfullscreen="" 
+      loading="lazy" 
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
 </section>
 
-<footer>&copy; Warkop Brodie. Sampai Mati.</footer>
+<footer>
+  <div class="footer-content">
+    
+    <div class="footer-section brand">
+      <h3>Warkop Brodie</h3>
+      <p>Tempat nongkrong paling asik, santai, dan tanpa sekat. Semua berhak menikmatie! ☕</p>
+    </div>
+
+    <div class="footer-section footer-links">
+      <h3>Menu Pintas</h3>
+      <ul>
+        <li><a href="#menu">📋 Daftar Menu</a></li>
+        <li><a href="#about">📖 Tentang Kami</a></li>
+        <li><a href="#info">📍 Info Toko</a></li>
+        <li><a href="#order">🛒 Pesan Sekarang</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h3>Ikuti Kami</h3>
+      <p>Pantau info dan keseruan kami di:</p>
+      <div class="social-icons">
+        
+        <a href="https://instagram.com/warkopbrodie" target="_blank" title="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+
+        <a href="https://wa.me/6281511152109" target="_blank" title="WhatsApp">
+          <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+        </a>
+
+      </div>
+    </div>
+  </div>
 
 <script>
 // HEADER & MENU
@@ -536,6 +774,17 @@ const sendOrderBtn=document.getElementById('send-order');
 const customerName=document.getElementById('customer-name');
 const orderNote=document.getElementById('order-note');
 const subtotalEl=document.getElementById('subtotal');
+const paymentMethodSelect = document.getElementById('payment-method');
+const qrisBox = document.getElementById('qris-box');
+
+// LOGIKA QRIS MUNCUL/HILANG
+paymentMethodSelect.addEventListener('change', () => {
+  if (paymentMethodSelect.value === 'QRIS') {
+    qrisBox.style.display = 'block';
+  } else {
+    qrisBox.style.display = 'none';
+  }
+});
 
 function updateCart(){
   cartList.innerHTML='';
@@ -559,7 +808,7 @@ function updateCart(){
   });
 }
 
-// QTY BUTTONS - ambil harga dari HTML
+// QTY BUTTONS
 document.querySelectorAll('.menu-item').forEach(item=>{
   const name=item.dataset.name;
   let priceText=item.querySelector('.price-tag').textContent.replace(/[^\d]/g,'');
@@ -583,26 +832,74 @@ document.querySelectorAll('.menu-item').forEach(item=>{
   });
 });
 
-// SEND ORDER
+// SEND ORDER (UPDATED WITH PAYMENT METHOD)
 sendOrderBtn.addEventListener('click',()=>{
   const name=customerName.value.trim();
   const note=orderNote.value.trim();
+  const payment = paymentMethodSelect.value;
+  
   if(!name) return alert('Masukkan nama Anda!');
   if(Object.keys(cart).length===0) return alert('Keranjang kosong!');
-  let msg=`Halo Warkop Brodie! Nama saya ${name} dan saya ingin memesan:\n`;
+  
+  let msg=`Halo Warkop Brodie! Nama saya ${name}.\n`;
+  msg += `Saya ingin memesan:\n`;
   for(const [menu,info] of Object.entries(cart)){msg+=`- ${menu} x ${info.qty}\n`;}
+  
+  msg += `\nMetode Bayar: ${payment}\n`;
   if(note) msg+=`Catatan: ${note}\n`;
+  
   const waLink=`https://wa.me/6281511152109?text=${encodeURIComponent(msg)}`;
   window.open(waLink,'_blank');
+  
+  // Reset Form
   cart={};
   document.querySelectorAll('.menu-item').forEach(item=>{item.querySelector('.qty').textContent='0'; item.classList.remove('selected');});
   updateCart();
   customerName.value='';
   orderNote.value='';
+  paymentMethodSelect.value='Tunai';
+  qrisBox.style.display='none';
 });
+
+// TYPEWRITER EFFECT
+const textElement = document.getElementById('typing-text');
+const textToType = "Selamat Datang di Warkop Brodie";
+const typingSpeed = 100;
+const deletingSpeed = 50;
+const pauseTime = 2000;
+let charIndex = 0;
+let isDeleting = false;
+function typeEffect() {
+  const currentText = textToType.substring(0, charIndex);
+  textElement.textContent = currentText;
+  if (!isDeleting && charIndex < textToType.length) {
+    charIndex++; setTimeout(typeEffect, typingSpeed);
+  } else if (isDeleting && charIndex > 0) {
+    charIndex--; setTimeout(typeEffect, deletingSpeed);
+  } else {
+    isDeleting = !isDeleting;
+    setTimeout(typeEffect, isDeleting ? pauseTime : 500);
+  }
+}
+document.addEventListener('DOMContentLoaded', typeEffect);
+
+// ========== LOGIKA TOMBOL SCROLL TO TOP ==========
+const scrollBtn = document.getElementById("scrollTopBtn");
+
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+    scrollBtn.style.display = "block"; // Munculin tombol
+  } else {
+    scrollBtn.style.display = "none"; // Sembunyiin tombol
+  }
+}
+
+function topFunction() {
+  window.scrollTo({top: 0, behavior: 'smooth'}); // Scroll halus ke atas
+}
 </script>
 
 </body>
 </html>
-
-
